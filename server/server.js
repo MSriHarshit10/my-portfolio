@@ -1,16 +1,27 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const mongoose = require("mongoose");
+require("dotenv").config();
+
 const contactRoutes = require("./contactRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log("✅ Connected to MongoDB Atlas"))
+.catch((err) => console.error("❌ MongoDB connection error:", err));
+
 // Middleware
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../client")));
 
-// Serve index.html on root route
+// Serve index.html
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/index.html"));
 });
@@ -19,10 +30,6 @@ app.get("/", (req, res) => {
 app.use("/contact", contactRoutes);
 
 // Start server
-app.use((req, res) => {
-  res.status(404).send("404 - Page not found");
-});
-
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
