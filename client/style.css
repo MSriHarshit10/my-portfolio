@@ -1,0 +1,10 @@
+body {
+  font-family: 'Times New Roman', Times, serif;
+  text-align: center;
+  padding: 20px;
+}
+
+input, textarea {
+  width: 300px;
+  margin: 5px;
+}
